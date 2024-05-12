@@ -5,15 +5,21 @@ import torch.optim as optim
 import torch
 from torchvision.models.detection import fasterrcnn_resnet50_fpn
 import os
-from utils import StampDataset
+from util import StampDataset
 from torch.utils.data import  DataLoader
-from data_preparing import collate_fn, transform
+from data_preparing import collate_fn
+from torchvision.transforms import transforms
 
 if __name__ == '__main__':
 
-    train_dataset = StampDataset(root_dir='code/split_data/train', transform=transform)
+    transform = transforms.Compose([
+        transforms.Resize((224, 224)),
+        transforms.ToTensor(),
+        transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
+    ])
+    train_dataset = StampDataset(root_dir='/Users/admin/Documents/ВКР/code/split_data/train', transform=transform)
     train_dataloader = DataLoader(train_dataset, batch_size=4, shuffle=True, num_workers=0, collate_fn=collate_fn)
-    valid_dataset = StampDataset(root_dir='code/split_data/valid', transform=None)
+    valid_dataset = StampDataset(root_dir='/Users/admin/Documents/ВКР/code/split_data/valid', transform=None)
     valid_dataloader = DataLoader(valid_dataset, batch_size=4, shuffle=False, num_workers=0, collate_fn=collate_fn)
     print(len(train_dataloader), len(valid_dataloader))
 
