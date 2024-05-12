@@ -7,20 +7,14 @@ from torchvision.models.detection import fasterrcnn_resnet50_fpn
 import os
 from util import StampDataset
 from torch.utils.data import  DataLoader
-from data_preparing import collate_fn
-from torchvision.transforms import transforms
+from data_preparing import func_transform
 
 if __name__ == '__main__':
-
-    transform = transforms.Compose([
-        transforms.Resize((224, 224)),
-        transforms.ToTensor(),
-        transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
-    ])
+    transform = func_transform()
     train_dataset = StampDataset(root_dir='/Users/admin/Documents/ВКР/code/split_data/train', transform=transform)
-    train_dataloader = DataLoader(train_dataset, batch_size=4, shuffle=True, num_workers=0, collate_fn=collate_fn)
+    train_dataloader = DataLoader(train_dataset, batch_size=1, shuffle=True, num_workers=0)
     valid_dataset = StampDataset(root_dir='/Users/admin/Documents/ВКР/code/split_data/valid', transform=None)
-    valid_dataloader = DataLoader(valid_dataset, batch_size=4, shuffle=False, num_workers=0, collate_fn=collate_fn)
+    valid_dataloader = DataLoader(valid_dataset, batch_size=1, shuffle=False, num_workers=0)
     print(len(train_dataloader), len(valid_dataloader))
 
     os.environ['OMP_NUM_THREADS'] = '1'
@@ -37,9 +31,10 @@ if __name__ == '__main__':
     criterion = nn.CrossEntropyLoss()
     num_epochs = 10
     index = 0
-    count = 0
+    print(1)
     for epoch in range(num_epochs):
         for  images, labels in train_dataloader:
+            print(images, labels)
             loss_dict = model(images, labels)
             losses = sum(loss for loss in loss_dict.values())
             
@@ -48,6 +43,6 @@ if __name__ == '__main__':
             optimizer.step()
             
             index += 1
-            if index % 50 == 0:
-                print(f'Iteration #{index} loss: {losses.item()}')
+            # if index % 50 == 0:
+            print(f'Iteration #{index} loss: {losses.item()}')
         print(f'Epoch #{epoch} loss: {losses.item()}')

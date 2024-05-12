@@ -8,13 +8,7 @@ import matplotlib.pyplot as plt
 import torch
 import torchvision
 
-from PIL import Image
-from tqdm import tqdm
-from torch.utils.data import Dataset, DataLoader
-from torchvision import models
 from torchvision.transforms import transforms
-from torchvision.models.detection import fasterrcnn_resnet50_fpn
-from torchvision.models.detection import maskrcnn_resnet50_fpn
 from torch.nn.utils.rnn import pad_sequence
 
 
@@ -26,7 +20,13 @@ def collate_fn(batch):
     return imgs, annotations
 
 
-
+def func_transform():
+    transform = transforms.Compose([
+    transforms.Resize((224, 224)),
+    transforms.ToTensor(),
+    transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
+])
+    return transform
 
 
 def show_batch_simple(example_batch, n=4):
