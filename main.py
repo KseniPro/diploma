@@ -55,8 +55,7 @@ if __name__ == '__main__':
         gamma=0.1
     )
 
-    # let's train it just for 2 epochs
-    num_epochs = 2
+    num_epochs = 5
 
     for epoch in range(num_epochs):
         # train for one epoch, printing every 10 iterations
@@ -64,9 +63,9 @@ if __name__ == '__main__':
         # update the learning rate
         lr_scheduler.step()
         # evaluate on the test dataset
-    torch.save(model, 'entire_model.pth')
+    torch.save(model, 'models/entire_model.pth')
 
     model.eval()
     res = model(val_data_loader)
-    visualize_predictions(res)
+    # visualize_predictions(res)
     

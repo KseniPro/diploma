@@ -41,7 +41,7 @@ def visualize_predictions(image, predictions):
         label = predictions["labels"][i].cpu().detach().numpy()
         score = predictions["scores"][i].cpu().detach().numpy()
 
-        if score < 0.5:
+        if score < 0.1:
             continue
 
         x, y, xmax, ymax = box
