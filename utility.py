@@ -29,7 +29,6 @@ def read_boxes_and_labels(path):
         data = json.load(file)
     boxes = data["boxes"]
     labels = data["labels"]
-    labels = [val+1 for val in labels]
     return torch.as_tensor(boxes, dtype=torch.float32), torch.as_tensor(labels, dtype=torch.int64)
 
 def visualize_predictions(image, predictions):

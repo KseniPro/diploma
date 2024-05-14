@@ -35,7 +35,7 @@ if __name__ == '__main__':
 
     # load a model pre-trained on COCO
     model = torchvision.models.detection.fasterrcnn_resnet50_fpn(weights="DEFAULT")
-    num_classes = 2 
+    num_classes = 3
     in_features = model.roi_heads.box_predictor.cls_score.in_features
     model.roi_heads.box_predictor = FastRCNNPredictor(in_features, num_classes)
 
@@ -65,7 +65,7 @@ if __name__ == '__main__':
         # evaluate on the test dataset
     torch.save(model, 'models/entire_model.pth')
 
-    model.eval()
-    res = model(val_data_loader)
+    # model.eval()
+    # res = model(val_data_loader)
     # visualize_predictions(res)
     

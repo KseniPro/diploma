@@ -23,5 +23,6 @@ if __name__ == '__main__':
 
     print(f"mAP50: {calculate_map50(res[0], ground_truth)}")
     visualize_predictions(Image.open(image_path).convert('RGB'), res[0])
+    print(res)
 
     
