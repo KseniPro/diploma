@@ -3,9 +3,9 @@ import json
 from PIL import Image
 
 
-images_dir = '/Users/admin/Documents/ВКР/code/split_data/train/images'
-labels_dir = '/Users/admin/Documents/ВКР/code/split_data/train/labels'
-output_dir = '/Users/admin/Documents/ВКР/code/split_data/train/labels_for_faster-rcnn'
+images_dir = 'lps/images'
+labels_dir = 'lps/labels'
+output_dir = 'lps/labels_for_faster-rcnn'
 os.makedirs(output_dir, exist_ok=True)
 
 for filename in os.listdir(images_dir):
