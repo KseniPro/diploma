@@ -36,9 +36,9 @@ def visualize_predictions(image, predictions):
     plt.imshow(image)
     ax = plt.gca()
     for i in range(predictions["boxes"].shape[0]):
-        box = predictions["boxes"][i].cpu().detach().numpy()
-        label = predictions["labels"][i].cpu().detach().numpy()
-        score = predictions["scores"][i].cpu().detach().numpy()
+        box = predictions["boxes"][i]
+        label = predictions["labels"][i]
+        score = predictions["scores"][i]
 
         if score < 0.1:
             continue
@@ -103,3 +103,18 @@ def train_one_epoch(model, optimizer, data_loader, device, epoch, print_freq, sc
         metric_logger.update(lr=optimizer.param_groups[0]["lr"])
 
     return metric_logger
+
+def remove_low_confidence_predictions(preds, thresh):
+    to_remove = []
+    for i, score in enumerate(preds['scores']):
+        if score < thresh:
+            to_remove.append(i)
+
+    def remove_elements_at_indices(elements, indices):
+        return [element for i, element in enumerate(elements) if i not in indices]
+    
+    preds['scores'] = np.array(remove_elements_at_indices(preds['scores'].cpu().detach().numpy(), to_remove))
+    preds['boxes'] = np.array(remove_elements_at_indices(preds['boxes'].cpu().detach().numpy(), to_remove))
+    preds['labels'] = np.array(remove_elements_at_indices(preds['labels'].cpu().detach().numpy(), to_remove))
+
+    return preds

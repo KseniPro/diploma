@@ -25,11 +25,11 @@ def calculate_mAP50(predictions, ground_truths):
     global_data = []
     total_true_boxes = 0
     for prediction, gt in zip(predictions, ground_truths):
-        pred_labels = prediction['labels'].cpu().detach().numpy()
-        pred_boxes = prediction['boxes'].cpu().detach().numpy()
-        scores = prediction['scores'].cpu().detach().numpy()
+        pred_labels = prediction['labels']
+        pred_boxes = prediction['boxes']
+        scores = prediction['scores']
         true_boxes = gt['boxes']
-        total_true_boxes += sum(pred_labels == 1)
+        total_true_boxes += sum(gt['labels'] == 1)
         matched = np.zeros(len(true_boxes))
         for i, pred_box in enumerate(pred_boxes):
             if (pred_labels[i] != 1):
@@ -55,8 +55,11 @@ def calculate_mAP50(predictions, ground_truths):
     false_positives = (true_positives == 0).astype(np.uint32)
     tp_cumsum = np.cumsum(true_positives)
     fp_cumsum = np.cumsum(false_positives)
-    recalls = tp_cumsum / len(true_boxes)
+    recalls = tp_cumsum / total_true_boxes
     precisions = tp_cumsum / (tp_cumsum + fp_cumsum)
+    recalls = np.insert(recalls, 0, 0)
+    precisions = np.insert(precisions, 0, 1)
+    print(recalls, precisions)
     # Calculate AP for this class
     ap = np.trapz(precisions, recalls)
 
