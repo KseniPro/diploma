@@ -7,7 +7,6 @@ from utility import collate_fn, train_one_epoch, visualize_predictions
 from torchvision.models.detection.faster_rcnn import FastRCNNPredictor
 
 if __name__ == '__main__':
-    model = torchvision.models.detection.fasterrcnn_resnet50_fpn(weights=FasterRCNN_ResNet50_FPN_Weights.DEFAULT)
     # For training
     train_dir = os.path.join('split_data', 'train')
     train_dataset = StampDataset(train_dir)
