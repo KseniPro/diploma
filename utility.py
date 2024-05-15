@@ -118,3 +118,12 @@ def remove_low_confidence_predictions(preds, thresh):
     preds['labels'] = np.array(remove_elements_at_indices(preds['labels'].cpu().detach().numpy(), to_remove))
 
     return preds
+
+def read_label(label_path):
+    with open(label_path) as f:
+        ground_truth = dict(json.load(f))
+
+    ground_truth['boxes'] = torch.Tensor(ground_truth['boxes'])
+    ground_truth['labels'] = torch.Tensor(ground_truth['labels'])
+    
+    return ground_truth

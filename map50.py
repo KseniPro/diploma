@@ -1,4 +1,5 @@
 import numpy as np
+import matplotlib.pyplot as plt
 
 def calculate_iou(box1, box2):
     """Calculate Intersection over Union (IoU) between two bounding boxes."""
@@ -50,7 +51,6 @@ def calculate_mAP50(predictions, ground_truths):
 
             global_data.append((scores[i], is_true_positive))
 
-    print(sorted(global_data, reverse=True, key = lambda tup: tup[0]))
     true_positives = np.array([tup[1] for tup in global_data])
     false_positives = (true_positives == 0).astype(np.uint32)
     tp_cumsum = np.cumsum(true_positives)
@@ -59,9 +59,20 @@ def calculate_mAP50(predictions, ground_truths):
     precisions = tp_cumsum / (tp_cumsum + fp_cumsum)
     recalls = np.insert(recalls, 0, 0)
     precisions = np.insert(precisions, 0, 1)
-    print(recalls, precisions)
     # Calculate AP for this class
     ap = np.trapz(precisions, recalls)
+
+    plt.figure(figsize=(8, 6))  # Optional: specifies the figure size
+    plt.plot(recalls, precisions, label='Precision-Recall curve')
+    plt.xlim(left=0)
+    plt.xlabel('Recall')
+    plt.ylabel('Precision')
+    plt.title('Faster RCNN, ResNet50')
+    plt.legend()  # Optional: if you want to add a legend
+    plt.grid(True)  # Optional: adds a grid for easier visualization
+
+    # Show the plot
+    plt.show()
 
     return ap
             
